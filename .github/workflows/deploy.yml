@@ -50,4 +50,4 @@ jobs:
 
       # Apply the Terraform configuration
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform apply --auto-approve
