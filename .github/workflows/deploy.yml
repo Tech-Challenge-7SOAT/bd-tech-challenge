@@ -5,9 +5,6 @@ on:
     branches:
       - main
 
-env:
-  AWS_REGION: us-east-1
-
 jobs:
   terraform:
     name: 'Terraform'
@@ -31,7 +28,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       # Initialize Terraform
       - name: Terraform Init
@@ -43,8 +40,8 @@ jobs:
 
       # Plan the Terraform deployment
       - name: Terraform Plan
-        run: terraform plan -var "DB_NAME=${{ env.DB_NAME }}" -var "DB_USERNAME=${{ env.DB_USERNAME }}" -var "DB_PASSWORD=${{ env.DB_PASSWORD }}" -var "AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }}" -var "AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY }}" -var "AWS_SESSION_TOKEN=${{ env.AWS_SESSION_TOKEN }}" -var "AWS_REGION=${{ env.AWS_REGION }}"
+        run: terraform plan -var "DB_NAME=${{ secrets.DB_NAME }}" -var "DB_USERNAME=${{ secrets.DB_USERNAME }}" -var "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" -var "AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }}" -var "AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY }}" -var "AWS_SESSION_TOKEN=${{ env.AWS_SESSION_TOKEN }}" -var "AWS_REGION=${{ env.AWS_REGION }}"
 
       # Apply the Terraform configuration
       - name: Terraform Apply
-        run: terraform apply --auto-approve -var "DB_NAME=${{ env.DB_NAME }}" -var "DB_USERNAME=${{ env.DB_USERNAME }}" -var "DB_PASSWORD=${{ env.DB_PASSWORD }}" -var "AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }}" -var "AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY }}" -var "AWS_SESSION_TOKEN=${{ env.AWS_SESSION_TOKEN }}" -var "AWS_REGION=${{ env.AWS_REGION }}"
+        run: terraform apply --auto-approve -var "DB_NAME=${{ secrets.DB_NAME }}" -var "DB_USERNAME=${{ secrets.DB_USERNAME }}" -var "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" -var "AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }}" -var "AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY }}" -var "AWS_SESSION_TOKEN=${{ env.AWS_SESSION_TOKEN }}" -var "AWS_REGION=${{ env.AWS_REGION }}"
