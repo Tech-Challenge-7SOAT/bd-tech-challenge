@@ -33,9 +33,6 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Set Terraform log level
-        run: echo "TF_LOG=DEBUG" >> $GITHUB_ENV
-
       # Initialize Terraform
       - name: Terraform Init
         run: terraform init
@@ -50,4 +47,4 @@ jobs:
 
       # Apply the Terraform configuration
       - name: Terraform Apply
-        run: terraform apply --auto-approve
+        run: terraform apply --auto-approve -var "DB_NAME=${{ env.DB_NAME }}" -var "DB_USERNAME=${{ env.DB_USERNAME }}" -var "DB_PASSWORD=${{ env.DB_PASSWORD }}" -var "AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }}" -var "AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY }}" -var "AWS_SESSION_TOKEN=${{ env.AWS_SESSION_TOKEN }}" -var "AWS_REGION=${{ env.AWS_REGION }}"
