@@ -2,12 +2,12 @@ resource "aws_db_instance" "default" {
   allocated_storage    = 5
   storage_type         = "gp2"
   engine               = "postgres"
-  engine_version       = "14"
+  engine_version       = "13.15"
   instance_class       = "db.t2.micro"
   db_name              = var.DB_NAME
   username             = var.DB_USERNAME
   password             = var.DB_PASSWORD
-  parameter_group_name = "default.postgres14"
+  parameter_group_name = "default.postgres13"
   skip_final_snapshot  = true
   publicly_accessible  = false
 }
