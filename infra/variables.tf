@@ -32,6 +32,11 @@ variable "AWS_SESSION_TOKEN" {
   sensitive   = true
 }
 
+variable "AWS_REGION" {
+  description = "The AWS region"
+  type        = string
+}
+
 variable "vpc_cidr_block" {
   description = "cidr block for VPC"
   type        = string
@@ -48,22 +53,4 @@ variable "db_subnet_cidr_block_2" {
   description = "cidr block for db subnet"
   type        = string
   default     = "10.0.0.128/25"
-}
-
-variable "aws_region" {
-  description = "The AWS region"
-  type        = string
-  default     = "us-east-1"
-}
-
-variable "subnet_az_1" {
-  description = "First availability zone for the subnet (AZs-1)"
-  type        = string
-  default     = "us-east-1a"
-}
-
-variable "subnet_az_2" {
-  description = "Second availability zone for the subnet (AZs-2)"
-  type        = string
-  default     = "us-east-1b"
 }
