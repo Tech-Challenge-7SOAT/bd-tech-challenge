@@ -44,7 +44,7 @@ jobs:
       # Destroy the Terraform infrastructure if TERRAFORM_DESTROY is true
       - name: Terraform Destroy
         if: ${{ env.TERRAFORM_DESTROY == 'true' }}
-        run: terraform destroy --auto-approve -var "TERRAFORM_DESTROY=${{ env.TERRAFORM_DESTROY }}" exit 0
+        run: terraform destroy --auto-approve -var "TERRAFORM_DESTROY=${{ env.TERRAFORM_DESTROY }}"; exit 0
 
       # Plan the Terraform deployment
       - name: Terraform Plan
