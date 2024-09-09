@@ -37,6 +37,16 @@ variable "AWS_REGION" {
   type        = string
 }
 
+variable "SUBNET_AZ_1" {
+  description = "First availability zone for the subnet (AZs-1)"
+  type        = string
+}
+
+variable "SUBNET_AZ_2" {
+  description = "Second availability zone for the subnet (AZs-2)"
+  type        = string
+}
+
 variable "vpc_cidr_block" {
   description = "cidr block for VPC"
   type        = string

@@ -31,11 +31,11 @@ resource "aws_vpc" "fastfood_vpc" {
 resource "aws_subnet" "fastfood_db_subnet_az_1" {
   vpc_id            = aws_vpc.fastfood_vpc.id
   cidr_block        = var.db_subnet_cidr_block_1
-  availability_zone = format("%sa", var.AWS_REGION)
+  availability_zone = var.SUBNET_AZ_1
 }
 
 resource "aws_subnet" "fastfood_db_subnet_az_2" {
   vpc_id            = aws_vpc.fastfood_vpc.id
   cidr_block        = var.db_subnet_cidr_block_2
-  availability_zone = format("%sb", var.AWS_REGION)
+  availability_zone = var.SUBNET_AZ_2
 }
