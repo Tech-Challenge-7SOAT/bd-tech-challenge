@@ -1,6 +1,6 @@
 resource "aws_security_group" "fastfood_db_sg" {
   name        = "fastfood_db_sg"
-  vpc_id      = vpc_id
+  vpc_id      = aws_vpc.fastfood_vpc.id
 
   ingress {
     from_port   = 5432
