@@ -64,9 +64,3 @@ variable "db_subnet_cidr_block_2" {
   type        = string
   default     = "10.0.0.128/25"
 }
-
-variable "TERRAFORM_DESTROY" {
-  description = "A flag to determine whether to destroy the infrastructure"
-  type        = bool
-  default     = false
-}
