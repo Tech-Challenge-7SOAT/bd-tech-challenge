@@ -37,3 +37,59 @@ variable "AWS_REGION" {
   type        = string
   default     = "us-east-1"
 }
+
+variable "vpc_cidr_block" {
+  description = "cidr block for VPC"
+  type        = string
+}
+
+variable "subnet_private_cidr_block" {
+  description = "cidr block for the private subnet"
+  type        = string
+}
+
+variable "db_subnet_cidr_block_1" {
+  description = "cidr block for db subnet"
+  type        = string
+}
+
+variable "db_subnet_cidr_block_2" {
+  description = "cidr block for db subnet"
+  type        = string
+}
+
+variable "subnet_az_1" {
+  description = "First availability zone for the subnet (AZs-1)"
+  type        = string
+}
+
+variable "subnet_az_2" {
+  description = "Second availability zone for the subnet (AZs-2)"
+  type        = string
+}
+
+variable "subnet" {
+  description = "A list of subnets"
+  type        = list(object({
+    name = string
+    cidr_block = string
+    availability_zone = string
+  }))
+  default = [
+    {
+      name = "fastfood_private_subnet"
+      cidr_block = var.subnet_private_cidr_block
+      availability_zone = var.subnet_az_1
+    },
+    {
+      name = "fastfood_database_subnet_az_1"
+      cidr_block = var.db_subnet_cidr_block_1
+      availability_zone = var.subnet_az_1
+    },
+    {
+      name = "fastfood_database_subnet_az_2"
+      cidr_block = var.db_subnet_cidr_block_2
+      availability_zone = var.subnet_az_2
+    }
+  ]
+}

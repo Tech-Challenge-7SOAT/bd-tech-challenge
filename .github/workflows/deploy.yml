@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  TERRAFORM_DESTROY: false
+
 jobs:
   terraform:
     name: 'Terraform'
@@ -37,6 +40,11 @@ jobs:
       # Terraform Validate
       - name: Terraform Validate
         run: terraform validate
+
+      # Destroy the Terraform infrastructure if TERRAFORM_DESTROY is true
+      - name: Terraform Destroy
+        if: ${{ env.TERRAFORM_DESTROY == 'true' }}
+        run: terraform destroy --auto-approve -var "DB_NAME=${{ secrets.DB_NAME }}" -var "DB_USERNAME=${{ secrets.DB_USERNAME }}" -var "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" -var "AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }}" -var "AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY }}" -var "AWS_SESSION_TOKEN=${{ env.AWS_SESSION_TOKEN }}" -var "AWS_REGION=${{ env.AWS_REGION }}" -var "TERRAFORM_DESTROY=${{ env.TERRAFORM_DESTROY }}" exit 0
 
       # Plan the Terraform deployment
       - name: Terraform Plan
