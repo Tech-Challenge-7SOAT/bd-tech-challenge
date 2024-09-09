@@ -1,29 +1,3 @@
-resource "aws_security_group" "fastfood_db_sg" {
-  name        = "fastfood_db_sg"
-  vpc_id      = vpc_id
-
-  ingress {
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-resource "aws_db_subnet_group" "fastfood_db_subnet_gp" {
-  name       = "fastfood-db-sb-gp"
-  subnet_ids = [
-    aws_subnet.subnet[0].id,
-    aws_subnet.subnet[1].id
-  ]
-}
-
 resource "aws_db_instance" "default" {
   allocated_storage    = 5
   storage_type         = "gp2"
