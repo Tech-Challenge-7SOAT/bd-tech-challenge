@@ -15,5 +15,6 @@ provider "aws" {
 }
 
 provider "github" {
+  version = "6.2.2"
   token = var.GIT_TOKEN
 }
