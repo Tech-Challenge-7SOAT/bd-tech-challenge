@@ -30,11 +30,6 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-#      - name: Get GitHub IPs
-#        run: |
-#          GITHUB_IPS=$(curl -H "Accept: application/vnd.github.v3+json" https://api.github.com/meta)
-#          echo "GITHUB_IPS=$GITHUB_IPS" >> $GITHUB_ENV
-
       - name: Set GitHub Token
         run: echo "GIT_TOKEN=${{ secrets.GIT_TOKEN }}" >> $GITHUB_ENV
 

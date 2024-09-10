@@ -20,18 +20,15 @@ resource "aws_security_group_rule" "github_ip" {
   from_port         = 5432
   to_port           = 5432
   protocol          = "tcp"
-  cidr_blocks       = [each.value]
+
+  # Use cidr_blocks for IPv4 addresses
+  cidr_blocks       = [for cidr in each.value : cidr if !can(regex("^.*:.*$", cidr))]
+
+  # Use ipv6_cidr_blocks for IPv6 addresses
+  ipv6_cidr_blocks  = [for cidr in each.value : cidr if can(regex("^.*:.*$", cidr))]
+
   security_group_id = aws_security_group.fastfood_db_sg.id
 }
-
-#resource "aws_security_group_rule" "github_ip" {
-#  type              = "ingress"
-#  from_port         = 5432
-#  to_port           = 5432
-#  protocol          = "tcp"
-#  cidr_blocks       = ["IP_DO_GITHUB/32"]
-#  security_group_id = aws_security_group.fastfood_db_sg.id
-#}
 
 resource "aws_db_subnet_group" "fastfood_db_subnet_gp" {
   name       = "fastfood-db-sb-gp"
