@@ -12,6 +12,10 @@ resource "aws_db_instance" "default" {
   publicly_accessible  = false
   db_subnet_group_name   = aws_db_subnet_group.fastfood_db_subnet_gp.name
   vpc_security_group_ids = [aws_security_group.fastfood_db_sg.id]
+
+  tags = {
+    Name = "fastfood_db_instance"
+  }
 }
 
 resource "null_resource" "db_migrations" {
