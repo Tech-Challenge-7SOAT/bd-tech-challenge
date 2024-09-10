@@ -36,6 +36,10 @@ resource "aws_db_subnet_group" "fastfood_db_subnet_gp" {
     aws_subnet.fastfood_db_subnet_az_1.id,
     aws_subnet.fastfood_db_subnet_az_2.id
   ]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_vpc" "fastfood_vpc" {
