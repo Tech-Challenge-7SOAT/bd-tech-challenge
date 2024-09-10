@@ -22,10 +22,10 @@ resource "aws_security_group_rule" "github_ip" {
   protocol          = "tcp"
 
   # Use cidr_blocks for IPv4 addresses
-  cidr_blocks       = [for cidr in each.value : cidr if !can(regex("^.*:.*$", cidr))]
+  cidr_blocks       = can(regex("^.*:.*$", each.value)) ? [] : [each.value]
 
   # Use ipv6_cidr_blocks for IPv6 addresses
-  ipv6_cidr_blocks  = [for cidr in each.value : cidr if can(regex("^.*:.*$", cidr))]
+  ipv6_cidr_blocks  = can(regex("^.*:.*$", each.value)) ? [each.value] : []
 
   security_group_id = aws_security_group.fastfood_db_sg.id
 }
