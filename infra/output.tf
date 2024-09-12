@@ -13,7 +13,3 @@ output "vpc_id" {
   description = "VPC id"
 }
 
-output "github_ips" {
-  value = data.github_ip_ranges.github.hooks
-}
-
