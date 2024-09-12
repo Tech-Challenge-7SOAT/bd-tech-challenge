@@ -12,4 +12,3 @@ output "vpc_id" {
   value       = "${aws_vpc.fastfood_vpc.id}"
   description = "VPC id"
 }
-
