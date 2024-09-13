@@ -37,6 +37,9 @@ resource "aws_db_subnet_group" "fastfood_db_subnet_gp" {
 resource "aws_vpc" "fastfood_vpc" {
   cidr_block = var.vpc_cidr_block
 
+  enable_dns_support   = true
+  enable_dns_hostnames = true
+
     tags = {
         Name = "fastfood_vpc"
     }
