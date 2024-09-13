@@ -23,6 +23,6 @@ resource "null_resource" "db_migrations" {
   depends_on = [aws_db_instance.default]
 
   provisioner "local-exec" {
-    command = "sleep 60; psql -U ${var.DB_USERNAME} -d ${var.DB_NAME} -h ${aws_db_instance.default.address} -v passwd=${var.DB_PASSWORD} -f ./db_schema.sql"
+    command = "export PGPASSWORD=${var.DB_PASSWORD}; sleep 60; psql -U ${var.DB_USERNAME} -d ${var.DB_NAME} -h ${aws_db_instance.default.address} -f ./db_schema.sql"
   }
 }
