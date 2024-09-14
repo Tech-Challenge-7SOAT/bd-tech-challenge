@@ -19,7 +19,7 @@ resource "aws_db_instance" "default" {
   }
 }
 
-resource "null_resource" "db_migrations" {
+resource "null_resource" "db_schema" {
   depends_on = [aws_db_instance.default]
 
   provisioner "local-exec" {
