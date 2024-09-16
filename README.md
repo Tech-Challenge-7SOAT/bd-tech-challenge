@@ -62,3 +62,30 @@ O provisionador `local-exec` executa os seguintes comandos:
 |---------|
 
 Cada linha na tabela `aws_db_instance` representa uma instância de banco de dados AWS RDS. A tabela `null_resource` é usada para executar comandos locais quando a instância do banco de dados é criada.
+
+
+## Diagrama de Infraestrutura
+
+O diagrama de infraestrutura mostra como os recursos são provisionados usando Terraform.
+
+## Componentes Principais
+
+- **VPC (Virtual Private Cloud)**: É criada uma VPC chamada `fastfood_vpc` com suporte a DNS habilitado.
+
+- **Internet Gateway**: Um Internet Gateway `fastfood_igtw` é anexado à VPC.
+
+- **Route Table**: Uma tabela de roteamento `fastfood_route_tb` é criada.
+
+- **Subnets**: Duas sub-redes `fastfood_db_subnet_az_1` e `fastfood_db_subnet_az_2` são criadas na VPC.
+
+- **Security Group**: Um grupo de segurança `fastfood_db_sg` é criado.
+
+- **DB Subnet Group**: Um grupo de sub-redes de banco de dados `fastfood_db_subnet_gp` é criado.
+
+- **RDS Instance**: Uma instância RDS `fastfoodrds` é criada para hospedar o banco de dados PostgreSQL.
+
+- **DB Schema**: Um recurso `null_resource` é usado para aplicar um esquema de banco de dados ao banco de dados RDS após sua criação.
+
+## Integração dos Recursos
+
+Todos esses recursos são integrados para criar uma infraestrutura de rede segura e escalável para o aplicativo de banco de dados. A VPC fornece um ambiente de rede isolado, as sub-redes permitem a distribuição de recursos em várias zonas de disponibilidade para alta disponibilidade e o grupo de segurança controla o tráfego de rede para os recursos. A instância RDS fornece um banco de dados gerenciado, eliminando a necessidade de gerenciar manualmente um servidor de banco de dados.
