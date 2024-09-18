@@ -33,7 +33,7 @@ Essas são as configurações de recursos do Terraform para uma instância de ba
 
 ### Comandos do Provisionador
 
-- Objetivo: é usado para aplicar um esquema de banco de dados ao banco de dados RDS após sua criação.
+Objetivo: É usado para aplicar um esquema de banco de dados ao banco de dados RDS após sua criação.
 
 O provisionador `local-exec` executa os seguintes comandos:
 
@@ -50,7 +50,7 @@ O modelo de dados é projetado para suportar as operações do aplicativo de man
 Observação:
 - "PK" indica uma chave primária.
 - "FK" indica uma chave estrangeira, com a tabela e coluna referenciada após a seta "->".
-- 
+
 ### Tabela: `tb_customers`
 
 Esta tabela armazena informações sobre os clientes.
