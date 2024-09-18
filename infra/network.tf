@@ -2,6 +2,14 @@ resource "aws_security_group" "fastfood_db_sg" {
   name        = "fastfood_db_sg"
   vpc_id      = aws_vpc.fastfood_vpc.id
 
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -12,26 +20,6 @@ resource "aws_security_group" "fastfood_db_sg" {
   tags = {
     Name = "fastfood_db_sg"
   }
-}
-
-resource "aws_security_group_rule" "github_ipv4" {
-  for_each          = toset(var.ingress_ipv4_cidr_blocks)
-  type              = "ingress"
-  from_port         = 5432
-  to_port           = 5432
-  protocol          = "tcp"
-  cidr_blocks       = [each.value]
-  security_group_id = aws_security_group.fastfood_db_sg.id
-}
-
-resource "aws_security_group_rule" "github_ipv6" {
-  for_each          = toset(var.ingress_ipv6_cidr_blocks)
-  type              = "ingress"
-  from_port         = 5432
-  to_port           = 5432
-  protocol          = "tcp"
-  ipv6_cidr_blocks  = [each.value]
-  security_group_id = aws_security_group.fastfood_db_sg.id
 }
 
 resource "aws_db_subnet_group" "fastfood_db_subnet_gp" {
