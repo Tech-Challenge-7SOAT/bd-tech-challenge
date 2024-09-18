@@ -7,22 +7,16 @@ Objetivo do projeto é para atender aos requisitos do Tech Challenge da FIAP, on
 
 O banco de dados escolhido para este projeto é o PostgreSQL. A escolha do PostgreSQL foi baseada em vários fatores:
 
-1. **SQL Completo**: O PostgreSQL suporta o SQL completo e oferece muitos recursos avançados, como junções complexas e transações.
-2. **Extensibilidade**: O PostgreSQL é altamente extensível. Ele permite que os usuários definam seus próprios tipos de dados, operadores e funções.
-3. **Compatibilidade**: O PostgreSQL é compatível com várias plataformas de hospedagem, o que oferece flexibilidade em termos de implantação.
-4. **Comunidade Ativa**: O PostgreSQL tem uma comunidade ativa de desenvolvedores, o que garante atualizações regulares e disponibilidade de suporte.
+1. **SQL Completo**: Suporta o SQL completo e oferece muitos recursos avançados, como junções complexas e transações.
+2. **Extensibilidade**: Altamente extensível. Ele permite que os usuários definam seus próprios tipos de dados, operadores e funções.
+3. **Compatibilidade**: Compatível com várias plataformas de hospedagem, o que oferece flexibilidade em termos de implantação.
+4. **Comunidade Ativa**: Tem uma comunidade ativa de desenvolvedores, o que garante atualizações regulares e disponibilidade de suporte.
 
-## Modelo de Dados
+## Provisionamento do Banco de Dados
 
-O modelo de dados é projetado para suportar as operações do aplicativo de maneira eficiente. O modelo de dados é baseado no seguinte esquema de banco de dados:
+Essas são as configurações de recursos do Terraform para uma instância de banco de dados AWS RDS:
 
-Observação: 
-- "PK" indica uma chave primária.
-- "FK" indica uma chave estrangeira, com a tabela e coluna referenciada após a seta "->".
-
-### Tabela: `aws_db_instance`
-
-Esta tabela armazena informações sobre a instância do banco de dados AWS RDS.
+### Instância: `aws_db_instance`
 
 - `identifier`: Identificador único para a instância do banco de dados.
 - `allocated_storage`: A quantidade de armazenamento alocado para a instância do banco de dados.
@@ -37,13 +31,9 @@ Esta tabela armazena informações sobre a instância do banco de dados AWS RDS.
 - `db_subnet_group_name`: O nome do grupo de sub-redes do banco de dados.
 - `vpc_security_group_ids`: Os IDs do grupo de segurança VPC para a instância do banco de dados.
 
-### Tabela: `null_resource`
+### Comandos do Provisionador
 
-Esta tabela é usada para executar comandos locais quando a instância do banco de dados é criada.
-
-- `command`: "export PGPASSWORD=${var.DB_PASSWORD}; sleep 60; psql -U ${var.DB_USERNAME} -d ${var.DB_NAME} -h ${aws_db_instance.default.address} -f ./db_schema.sql"
-
-## Comandos do Provisionador
+- Objetivo: é usado para aplicar um esquema de banco de dados ao banco de dados RDS após sua criação.
 
 O provisionador `local-exec` executa os seguintes comandos:
 
@@ -57,6 +47,10 @@ O provisionador `local-exec` executa os seguintes comandos:
 
 O modelo de dados é projetado para suportar as operações do aplicativo de maneira eficiente. O modelo de dados é baseado no seguinte esquema de banco de dados:
 
+Observação:
+- "PK" indica uma chave primária.
+- "FK" indica uma chave estrangeira, com a tabela e coluna referenciada após a seta "->".
+- 
 ### Tabela: `tb_customers`
 
 Esta tabela armazena informações sobre os clientes.
