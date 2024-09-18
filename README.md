@@ -16,6 +16,10 @@ O banco de dados escolhido para este projeto é o PostgreSQL. A escolha do Postg
 
 O modelo de dados é projetado para suportar as operações do aplicativo de maneira eficiente. O modelo de dados é baseado no seguinte esquema de banco de dados:
 
+Observação: 
+- "PK" indica uma chave primária.
+- "FK" indica uma chave estrangeira, com a tabela e coluna referenciada após a seta "->".
+
 ### Tabela: `aws_db_instance`
 
 Esta tabela armazena informações sobre a instância do banco de dados AWS RDS.
@@ -51,18 +55,56 @@ O provisionador `local-exec` executa os seguintes comandos:
 
 ## Diagrama de Modelo de Dados
 
-### Tabela: `aws_db_instance`
+O modelo de dados é projetado para suportar as operações do aplicativo de maneira eficiente. O modelo de dados é baseado no seguinte esquema de banco de dados:
 
-| identifier | allocated_storage | engine | engine_version | instance_class | db_name | username | password | parameter_group_name | publicly_accessible | db_subnet_group_name | vpc_security_group_ids |
-|------------|-------------------|--------|----------------|----------------|---------|----------|----------|----------------------|---------------------|----------------------|------------------------|
+### Tabela: `tb_customers`
 
-### Tabela: `null_resource`
+Esta tabela armazena informações sobre os clientes.
 
-| command |
-|---------|
+- `id` (PK): Identificador único para o cliente.
+- `cpf`: CPF do cliente.
+- `created_at`: Data e hora de criação do registro do cliente.
+- `email`: Email do cliente.
+- `first_name`: Primeiro nome do cliente.
+- `last_name`: Sobrenome do cliente.
+- `phone_number`: Número de telefone do cliente.
 
-Cada linha na tabela `aws_db_instance` representa uma instância de banco de dados AWS RDS. A tabela `null_resource` é usada para executar comandos locais quando a instância do banco de dados é criada.
+### Tabela: `tb_products`
 
+Esta tabela armazena informações sobre os produtos.
+
+- `id` (PK): Identificador único para o produto.
+- `category`: Categoria do produto.
+- `created_at`: Data e hora de criação do registro do produto.
+- `deleted_at`: Data e hora de exclusão do registro do produto.
+- `description`: Descrição do produto.
+- `is_active`: Indica se o produto está ativo.
+- `name`: Nome do produto.
+- `price`: Preço do produto.
+- `time_to_prepare`: Tempo necessário para preparar o produto.
+- `updated_at`: Data e hora da última atualização do registro do produto.
+
+### Tabela: `tb_orders`
+
+Esta tabela armazena informações sobre os pedidos.
+
+- `id` (PK): Identificador único para o pedido.
+- `created_at`: Data e hora de criação do pedido.
+- `is_payed`: Indica se o pedido foi pago.
+- `status`: Status do pedido.
+- `time_to_prepare`: Tempo necessário para preparar o pedido.
+- `total_amount`: Valor total do pedido.
+- `updated_at`: Data e hora da última atualização do pedido.
+- `customer_id` (FK -> `tb_customers.id`): Identificador do cliente que fez o pedido.
+
+### Tabela: `tb_order_products`
+
+Esta tabela armazena informações sobre os produtos de um pedido.
+
+- `id` (PK): Identificador único para o produto do pedido.
+- `quantity`: Quantidade do produto no pedido.
+- `order_id` (FK -> `tb_orders.id`): Identificador do pedido.
+- `product_id` (FK -> `tb_products.id`): Identificador do produto.
 
 ## Diagrama de Infraestrutura
 
