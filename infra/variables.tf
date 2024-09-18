@@ -64,3 +64,15 @@ variable "db_subnet_cidr_block_2" {
   type        = string
   default     = "10.0.0.128/25"
 }
+
+variable "ingress_ipv4_cidr_blocks" {
+  description = "List of IPv4 CIDR blocks for ingress rules"
+  type        = list(string)
+  default     = ["140.82.0.0/16", "185.199.0.0/16", "143.55.0.0/16", "192.30.0.0/16", "10.0.0.0/24"]
+}
+
+variable "ingress_ipv6_cidr_blocks" {
+  description = "List of IPv6 CIDR blocks for ingress rules"
+  type        = list(string)
+  default     = ["2a0a:a440::/29", "2606:50c0::/32"]
+}
