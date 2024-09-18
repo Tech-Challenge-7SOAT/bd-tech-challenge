@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "terraform-deploy-fiap2024"
-    key    = "backend/terraform.tfstate"
+    key    = "backend/rds/terraform.tfstate"
     region = "us-east-1"
   }
 }
