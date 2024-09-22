@@ -64,3 +64,15 @@ variable "db_subnet_cidr_block_2" {
   type        = string
   default     = "10.0.0.128/25"
 }
+
+variable "private_subnet_cidr_block_1" {
+  description = "cidr block for private subnet"
+  type        = string
+  default     = "10.0.3.0/24"
+}
+
+variable "private_subnet_cidr_block_2" {
+  description = "cidr block for private subnet"
+  type        = string
+  default     = "10.0.4.0/24"
+}

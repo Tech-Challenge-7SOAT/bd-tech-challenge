@@ -26,7 +26,9 @@ resource "aws_db_subnet_group" "fastfood_db_subnet_gp" {
   name       = "fastfood-db-sb-gp"
   subnet_ids = [
     aws_subnet.fastfood_db_subnet_az_1.id,
-    aws_subnet.fastfood_db_subnet_az_2.id
+    aws_subnet.fastfood_db_subnet_az_2.id,
+    aws_subnet.private_subnet_1.id,
+    aws_subnet.private_subnet_2.id
   ]
 
   lifecycle {
@@ -86,6 +88,16 @@ resource "aws_subnet" "fastfood_db_subnet_az_2" {
   }
 }
 
+resource "aws_subnet" "private_subnet_1" {
+  vpc_id     = aws_vpc.fastfood_vpc.id
+  cidr_block = var.private_subnet_cidr_block_1
+}
+
+resource "aws_subnet" "private_subnet_2" {
+  vpc_id     = aws_vpc.fastfood_vpc.id
+  cidr_block = var.private_subnet_cidr_block_2
+}
+
 resource "aws_route_table_association" "fastfood_rta_subnet_1" {
   subnet_id      = aws_subnet.fastfood_db_subnet_az_1.id
   route_table_id = aws_route_table.fastfood_route_tb.id
@@ -94,4 +106,36 @@ resource "aws_route_table_association" "fastfood_rta_subnet_1" {
 resource "aws_route_table_association" "fastfood_rta_subnet_2" {
   subnet_id      = aws_subnet.fastfood_db_subnet_az_2.id
   route_table_id = aws_route_table.fastfood_route_tb.id
+}
+
+resource "aws_route_table" "private_route_table" {
+  vpc_id = aws_vpc.fastfood_vpc.id
+}
+
+resource "aws_route_table_association" "private_subnet_1" {
+  subnet_id      = aws_subnet.private_subnet_1.id
+  route_table_id = aws_route_table.private_route_table.id
+}
+
+resource "aws_route_table_association" "private_subnet_2" {
+  subnet_id      = aws_subnet.private_subnet_2.id
+  route_table_id = aws_route_table.private_route_table.id
+}
+
+resource "aws_security_group_rule" "private_ingress" {
+  type              = "ingress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.fastfood_db_sg.id
+}
+
+resource "aws_security_group_rule" "private_egress" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.fastfood_db_sg.id
 }
