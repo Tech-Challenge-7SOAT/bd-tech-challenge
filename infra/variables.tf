@@ -50,7 +50,7 @@ variable "SUBNET_AZ_2" {
 variable "vpc_cidr_block" {
   description = "cidr block for VPC"
   type        = string
-  default     = "10.0.0.0/24"
+  default     = "10.0.0.0/16"
 }
 
 variable "db_subnet_cidr_block_1" {
