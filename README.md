@@ -100,6 +100,12 @@ Esta tabela armazena informações sobre os produtos de um pedido.
 - `order_id` (FK -> `tb_orders.id`): Identificador do pedido.
 - `product_id` (FK -> `tb_products.id`): Identificador do produto.
 
+### Tabela: `tb_role_admin`
+
+Esta tabela armazena informações sobre os produtos de um pedido.
+
+- `cpf` (PK): CPF do administrador. Este campo é a chave primária da tabela.
+
 ## Diagrama de Infraestrutura
 
 O diagrama de infraestrutura mostra como os recursos são provisionados usando Terraform.
@@ -112,7 +118,7 @@ O diagrama de infraestrutura mostra como os recursos são provisionados usando T
 
 - **Route Table**: Uma tabela de roteamento `fastfood_route_tb` é criada.
 
-- **Subnets**: Duas sub-redes `fastfood_db_subnet_az_1` e `fastfood_db_subnet_az_2` são criadas na VPC.
+- **Subnets**: Duas sub-redes publicas `fastfood_db_subnet_az_1`, `fastfood_db_subnet_az_2` e duas su-redes privadas `private_subnet_1`, `private_subnet_2` são criadas na VPC.
 
 - **Security Group**: Um grupo de segurança `fastfood_db_sg` é criado.
 
