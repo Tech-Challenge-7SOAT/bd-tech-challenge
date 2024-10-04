@@ -2,12 +2,30 @@ data "aws_vpc" "default" {
   default = true
 }
 
-# Obter as subnets da VPC default
-data "aws_subnet_ids" "default" {
-  vpc_id = data.aws_vpc.default.id
+data "aws_subnet" "default_subnet_1" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
+  filter {
+    name   = "tag:aws:cloudformation:logical-id"
+    values = ["PublicSubnet1"]
+  }
+  availability_zone = "us-east-1a"
 }
 
-# Grupo de segurança para o RDS
+data "aws_subnet" "default_subnet_2" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
+  filter {
+    name   = "tag:aws:cloudformation:logical-id"
+    values = ["PublicSubnet2"]
+  }
+  availability_zone = "us-east-1b"
+}
+
 resource "aws_security_group" "fastfood_db_sg" {
   name        = "fastfood_db_sg"
   vpc_id      = data.aws_vpc.default.id
@@ -32,10 +50,9 @@ resource "aws_security_group" "fastfood_db_sg" {
   }
 }
 
-# Subnet Group para o RDS, usando as subnets da VPC default
 resource "aws_db_subnet_group" "fastfood_db_subnet_gp" {
   name       = "fastfood-db-sb-gp"
-  subnet_ids = data.aws_subnet_ids.default.ids
+  subnet_ids = [data.aws_subnet.default_subnet_1.id, data.aws_subnet.default_subnet_2.id]
 
   tags = {
     Name = "fastfood-db-sb-gp"
