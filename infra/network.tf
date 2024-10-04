@@ -1,12 +1,22 @@
+data "aws_vpc" "default" {
+  default = true
+}
+
+# Obter as subnets da VPC default
+data "aws_subnet_ids" "default" {
+  vpc_id = data.aws_vpc.default.id
+}
+
+# Grupo de segurança para o RDS
 resource "aws_security_group" "fastfood_db_sg" {
   name        = "fastfood_db_sg"
-  vpc_id      = aws_vpc.fastfood_vpc.id
+  vpc_id      = data.aws_vpc.default.id
 
   ingress {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"]  
     ipv6_cidr_blocks = ["::/0"]
   }
 
@@ -22,119 +32,153 @@ resource "aws_security_group" "fastfood_db_sg" {
   }
 }
 
+# Subnet Group para o RDS, usando as subnets da VPC default
 resource "aws_db_subnet_group" "fastfood_db_subnet_gp" {
   name       = "fastfood-db-sb-gp"
-  subnet_ids = [
-    aws_subnet.fastfood_db_subnet_az_1.id,
-    aws_subnet.fastfood_db_subnet_az_2.id,
-    aws_subnet.private_subnet_1.id,
-    aws_subnet.private_subnet_2.id
-  ]
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_vpc" "fastfood_vpc" {
-  cidr_block = var.vpc_cidr_block
-
-  enable_dns_support   = true
-  enable_dns_hostnames = true
-
-    tags = {
-        Name = "fastfood_vpc"
-    }
-}
-
-resource "aws_internet_gateway" "fastfood_igtw" {
-  vpc_id = aws_vpc.fastfood_vpc.id
+  subnet_ids = data.aws_subnet_ids.default.ids
 
   tags = {
-    Name = "fastfood_igtw"
+    Name = "fastfood-db-sb-gp"
   }
 }
 
-resource "aws_route_table" "fastfood_route_tb" {
-  vpc_id = aws_vpc.fastfood_vpc.id
+# resource "aws_security_group" "fastfood_db_sg" {
+#   name        = "fastfood_db_sg"
+#   vpc_id      = aws_vpc.fastfood_vpc.id
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.fastfood_igtw.id
-  }
+#   ingress {
+#     from_port   = 5432
+#     to_port     = 5432
+#     protocol    = "tcp"
+#     cidr_blocks = ["0.0.0.0/0"]
+#     ipv6_cidr_blocks = ["::/0"]
+#   }
 
-  tags = {
-    Name = "fastfood_route_tb"
-  }
-}
+#   egress {
+#     from_port   = 0
+#     to_port     = 0
+#     protocol    = "-1"
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
 
-resource "aws_subnet" "fastfood_db_subnet_az_1" {
-  vpc_id            = aws_vpc.fastfood_vpc.id
-  cidr_block        = var.db_subnet_cidr_block_1
-  availability_zone = var.SUBNET_AZ_1
+#   tags = {
+#     Name = "fastfood_db_sg"
+#   }
+# }
 
-  tags = {
-    Name = "fastfood_db_subnet_az_1"
-  }
-}
+# resource "aws_db_subnet_group" "fastfood_db_subnet_gp" {
+#   name       = "fastfood-db-sb-gp"
+#   subnet_ids = [
+#     aws_subnet.fastfood_db_subnet_az_1.id,
+#     aws_subnet.fastfood_db_subnet_az_2.id,
+#     aws_subnet.private_subnet_1.id,
+#     aws_subnet.private_subnet_2.id
+#   ]
 
-resource "aws_subnet" "fastfood_db_subnet_az_2" {
-  vpc_id            = aws_vpc.fastfood_vpc.id
-  cidr_block        = var.db_subnet_cidr_block_2
-  availability_zone = var.SUBNET_AZ_2
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
 
-  tags = {
-    Name = "fastfood_db_subnet_az_2"
-  }
-}
+# resource "aws_vpc" "fastfood_vpc" {
+#   cidr_block = var.vpc_cidr_block
 
-resource "aws_subnet" "private_subnet_1" {
-  vpc_id     = aws_vpc.fastfood_vpc.id
-  cidr_block = var.private_subnet_cidr_block_1
+#   enable_dns_support   = true
+#   enable_dns_hostnames = true
 
-  tags = {
-    Name = "fastfood_private_subnet_1"
-  }
-}
+#     tags = {
+#         Name = "fastfood_vpc"
+#     }
+# }
 
-resource "aws_subnet" "private_subnet_2" {
-  vpc_id     = aws_vpc.fastfood_vpc.id
-  cidr_block = var.private_subnet_cidr_block_2
+# resource "aws_internet_gateway" "fastfood_igtw" {
+#   vpc_id = aws_vpc.fastfood_vpc.id
 
-  tags = {
-    Name = "fastfood_private_subnet_2"
-  }
-}
+#   tags = {
+#     Name = "fastfood_igtw"
+#   }
+# }
 
-resource "aws_route_table_association" "fastfood_rta_subnet_1" {
-  subnet_id      = aws_subnet.fastfood_db_subnet_az_1.id
-  route_table_id = aws_route_table.fastfood_route_tb.id
-}
+# resource "aws_route_table" "fastfood_route_tb" {
+#   vpc_id = aws_vpc.fastfood_vpc.id
 
-resource "aws_route_table_association" "fastfood_rta_subnet_2" {
-  subnet_id      = aws_subnet.fastfood_db_subnet_az_2.id
-  route_table_id = aws_route_table.fastfood_route_tb.id
-}
+#   route {
+#     cidr_block = "0.0.0.0/0"
+#     gateway_id = aws_internet_gateway.fastfood_igtw.id
+#   }
 
-resource "aws_route_table" "private_route_table" {
-  vpc_id = aws_vpc.fastfood_vpc.id
-}
+#   tags = {
+#     Name = "fastfood_route_tb"
+#   }
+# }
 
-resource "aws_route_table_association" "private_subnet_1" {
-  subnet_id      = aws_subnet.private_subnet_1.id
-  route_table_id = aws_route_table.private_route_table.id
-}
+# resource "aws_subnet" "fastfood_db_subnet_az_1" {
+#   vpc_id            = aws_vpc.fastfood_vpc.id
+#   cidr_block        = var.db_subnet_cidr_block_1
+#   availability_zone = var.SUBNET_AZ_1
 
-resource "aws_route_table_association" "private_subnet_2" {
-  subnet_id      = aws_subnet.private_subnet_2.id
-  route_table_id = aws_route_table.private_route_table.id
-}
+#   tags = {
+#     Name = "fastfood_db_subnet_az_1"
+#   }
+# }
 
-resource "aws_security_group_rule" "private_ingress" {
-  type              = "ingress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.fastfood_db_sg.id
-}
+# resource "aws_subnet" "fastfood_db_subnet_az_2" {
+#   vpc_id            = aws_vpc.fastfood_vpc.id
+#   cidr_block        = var.db_subnet_cidr_block_2
+#   availability_zone = var.SUBNET_AZ_2
+
+#   tags = {
+#     Name = "fastfood_db_subnet_az_2"
+#   }
+# }
+
+# resource "aws_subnet" "private_subnet_1" {
+#   vpc_id     = aws_vpc.fastfood_vpc.id
+#   cidr_block = var.private_subnet_cidr_block_1
+
+#   tags = {
+#     Name = "fastfood_private_subnet_1"
+#   }
+# }
+
+# resource "aws_subnet" "private_subnet_2" {
+#   vpc_id     = aws_vpc.fastfood_vpc.id
+#   cidr_block = var.private_subnet_cidr_block_2
+
+#   tags = {
+#     Name = "fastfood_private_subnet_2"
+#   }
+# }
+
+# resource "aws_route_table_association" "fastfood_rta_subnet_1" {
+#   subnet_id      = aws_subnet.fastfood_db_subnet_az_1.id
+#   route_table_id = aws_route_table.fastfood_route_tb.id
+# }
+
+# resource "aws_route_table_association" "fastfood_rta_subnet_2" {
+#   subnet_id      = aws_subnet.fastfood_db_subnet_az_2.id
+#   route_table_id = aws_route_table.fastfood_route_tb.id
+# }
+
+# resource "aws_route_table" "private_route_table" {
+#   vpc_id = aws_vpc.fastfood_vpc.id
+# }
+
+# resource "aws_route_table_association" "private_subnet_1" {
+#   subnet_id      = aws_subnet.private_subnet_1.id
+#   route_table_id = aws_route_table.private_route_table.id
+# }
+
+# resource "aws_route_table_association" "private_subnet_2" {
+#   subnet_id      = aws_subnet.private_subnet_2.id
+#   route_table_id = aws_route_table.private_route_table.id
+# }
+
+# resource "aws_security_group_rule" "private_ingress" {
+#   type              = "ingress"
+#   from_port         = 0
+#   to_port           = 0
+#   protocol          = "-1"
+#   cidr_blocks       = ["0.0.0.0/0"]
+#   security_group_id = aws_security_group.fastfood_db_sg.id
+# }
