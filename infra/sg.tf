@@ -1,6 +1,6 @@
 resource "aws_security_group" "fastfood_db_sg" {
   name        = "fastfood_db_sg"
-  vpc_id      = data.aws_vpc.default.id
+  vpc_id      = ""
 
   ingress {
     from_port   = 5432
