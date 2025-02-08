@@ -14,6 +14,15 @@ SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
+CREATE TABLE public.videos(
+    id BIGINT NOT NULL,
+    videoUrl VARCHAR(255) NOT NULL,
+    framesUrl VARCHAR(255),
+    status VARCHAR(255) NOT NULL,
+)
+
+ALTER TABLE public.videos OWNER TO root;
+
 CREATE TABLE public.tb_customers (
     id bigint NOT NULL,
     cpf character varying(255) NOT NULL,
